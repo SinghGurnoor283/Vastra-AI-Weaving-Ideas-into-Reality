@@ -1,0 +1,11 @@
+serviceAccountKey.json
+
+# .gitignore
+
+# Dependencies
+/node_modules
+
+# Environment Variables - DO NOT COMMIT THESE!
+.env
+*.env.local
+*.env.*.local
