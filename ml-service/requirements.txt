@@ -1,12 +1,11 @@
-# ml-service/requirements.txt
-
-Flask==3.0.0
-flask-cors==4.0.1
-scikit-learn==1.4.2
-numpy==1.26.4
-Pillow==10.2.0
-requests==2.31.0
-firebase-admin==6.5.0
-colormath==3.0.0
-sentence-transformers==2.6.1
-gunicorn==21.2.0
+ml-service/requirements.txt
+Flask>=3.0.0
+flask-cors>=4.0.0
+scikit-learn>=1.4.0
+numpy>=1.26.0
+Pillow>=10.0.0
+requests>=2.31.0
+firebase-admin>=6.5.0
+colormath>=3.0.0
+sentence-transformers>=2.6.0
+gunicorn>=21.0.0
