@@ -1,0 +1,34 @@
+# .github/workflows/scraper.yml
+
+name: Run Pinterest Scraper
+
+on:
+  # This is the schedule. It will run at 2:00 AM UTC every 2 days.
+  schedule:
+    - cron: '0 2 */2 * *'
+  # This also allows you to run it manually from the GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+
+    - name: Install dependencies for scraper
+      # This command navigates into your server folder and runs npm install
+      run: npm --prefix ./server install
+
+    - name: Run the scraper script
+      # This command runs your scraper with the secret key
+      run: node ./server/scraper.js
+      env:
+        # This makes your secret key available to the script
+        FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}

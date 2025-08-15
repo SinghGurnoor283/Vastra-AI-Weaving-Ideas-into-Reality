@@ -201,37 +201,37 @@ const Home = () => {
                     </div>
                 )}
                 {selectedImage && (
-            <div className="fixed inset-0 z-50 bg-gradient-to-b from-black/90 via-black/85 to-black/90 backdrop-blur-md flex justify-center overflow-y-auto px-4 py-10 sm:py-16">
+                        <div className="fixed inset-0 z-50 bg-gradient-to-b from-black/90 via-black/85 to-black/90 backdrop-blur-md flex justify-center overflow-y-auto px-4 py-10 sm:py-16">
 
-                <button
-                    className="fixed top-4 right-5 text-white/80 text-5xl font-light z-[51] transition-transform hover:scale-110 hover:text-white"
-                    onClick={() => setSelectedImage(null)}
-                    aria-label="Close image view"
-                >
-                    &times;
-                </button>
+                            <button
+                                className="fixed top-4 right-5 text-white/80 text-5xl font-light z-[51] transition-transform hover:scale-110 hover:text-white"
+                                onClick={() => setSelectedImage(null)}
+                                aria-label="Close image view"
+                            >
+                                &times;
+                            </button>
 
-                <div className="w-full max-w-2xl sm:max-w-3xl flex flex-col items-center gap-6 sm:gap-8">
+                            <div className="w-full max-w-2xl sm:max-w-3xl flex flex-col items-center gap-6 sm:gap-8">
 
-                    <img
-                        src={selectedImage}
-                        alt="Full view"
-                        className="w-full max-w-[75%] sm:max-w-[65%] md:max-w-[55%] h-auto object-contain rounded-xl shadow-2xl border border-white/10"
-                    />
+                                <img
+                                    src={selectedImage}
+                                    alt="Full view"
+                                    className="w-full max-w-[75%] sm:max-w-[65%] md:max-w-[55%] h-auto object-contain rounded-xl shadow-2xl border border-white/10"
+                                />
 
-                    <p className="text-center text-white/80 text-sm sm:text-base max-w-md">
-                        Discover palettes generated with classic color theory principles.
-                    </p>
+                                <p className="text-center text-white/80 text-sm sm:text-base max-w-md">
+                                    Discover palettes generated with classic color theory principles.
+                                </p>
 
-                    <ColorStudio
-                        analysis={colorAnalysis}
-                        isLoading={isAnalyzing}
-                        onBaseColorSelect={runAnalysis}
-                        selectedImageUrl={selectedImage}
-                    />
-                </div>
-            </div>
-        )}
+                                <ColorStudio
+                                    analysis={colorAnalysis}
+                                    isLoading={isAnalyzing}
+                                    onBaseColorSelect={runAnalysis}
+                                    selectedImageUrl={selectedImage}
+                                />
+                            </div>
+                        </div>
+                    )}
 
 
 
@@ -274,7 +274,7 @@ const Home = () => {
                             <div className="overflow-x-auto hide-scrollbar"><div className="flex space-x-6 pb-2">{userDesigns.map((design) => {
                                 const isFavorited = favoritedIds.has(design.id);
                                 return (
-                                    <div key={design.id} className="group relative min-w-[250px] aspect-square bg-zinc-900 rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-2 transition-transform duration-300" onClick={() => handleImageClick(design.image)}>
+                                    <div key={design.id} className="group relative min-w-[250px] aspect-[4/5] bg-zinc-900 rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-2 transition-transform duration-300" onClick={() => handleImageClick(design.image)}>
                                         <img src={design.image} alt={design.prompt} className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110" />
                                         <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"><p className="text-sm text-gray-200 line-clamp-3">{design.prompt}</p></div>
                                         <button onClick={(e) => handleToggleFavorite(e, design)} className={`absolute top-3 right-3 bg-black/50 p-2 rounded-full transition-colors ${isFavorited ? 'text-red-500' : 'text-white'} hover:bg-black/75`} aria-label="Toggle favorite">

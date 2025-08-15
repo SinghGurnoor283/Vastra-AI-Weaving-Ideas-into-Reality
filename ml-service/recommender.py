@@ -14,12 +14,31 @@ import threading
 import time
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
+import os
+
+# Redirect Hugging Face cache to a writable location
+os.environ["HF_HOME"] = "/tmp/huggingface"
+os.makedirs("/tmp/huggingface", exist_ok=True)
+
 from sentence_transformers import SentenceTransformer
+
+model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+
+
+import json
 
 from colormath.color_objects import sRGBColor, HSLColor
 from colormath.color_conversions import convert_color
 
-cred = credentials.Certificate("serviceAccountKey.json")
+
+
+service_account_str = os.environ["SERVICE_ACCOUNT_KEY"]
+
+service_account_info = json.loads(service_account_str)
+
+service_account_info['private_key'] = service_account_info['private_key'].replace('\\n', '\n')
+
+cred = credentials.Certificate(service_account_info)
 if not firebase_admin._apps:
     firebase_admin.initialize_app(cred)
 
