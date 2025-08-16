@@ -28,8 +28,9 @@ app.post('/generate-image', async (req, res) => {
     const imagePart = result.candidates[0]?.content?.parts?.find(p => p.inlineData);
     if (imagePart) {
       res.json({ image: imagePart.inlineData.data });
-      axios.post('http://localhost:5001/recluster').catch(err =>
-        console.error("ML reclustering error:", err.message));
+      axios.post('https://gurnoors-vastra-ai-final.hf.space/recluster')
+  .catch(err => console.error("ML reclustering error:", err.message));
+
     } else {
       res.status(500).json({ error: "Image not generated" });
     }

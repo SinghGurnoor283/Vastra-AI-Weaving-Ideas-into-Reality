@@ -29,7 +29,8 @@ const Trending = () => {
         const fetchTrendsAndFavorites = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch('http://localhost:5000/api/trends');
+                const response = await fetch('https://vastra-ai-weaving-ideas-into-reality-kun1.onrender.com/api/trends');
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }

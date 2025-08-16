@@ -18,11 +18,15 @@ export const useColorAnalysis = () => {
                 payload.baseColor = baseColor;
             }
 
-            const response = await fetch('http://localhost:5001/analyze-colors', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload),
-            });
+           const response = await fetch(
+                'https://gurnoors-vastra-ai-final.hf.space/analyze-colors',
+                {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
+                }
+                );
+
 
             if (!response.ok) {
                 throw new Error('Color analysis API request failed');

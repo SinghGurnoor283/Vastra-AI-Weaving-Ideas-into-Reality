@@ -35,7 +35,8 @@ const RecommendedForYou = () => {
         const fetchRecommendations = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`http://localhost:5001/recommendations/${user.uid}`);
+                const response = await fetch(`https://gurnoors-vastra-ai-final.hf.space/recommendations/${user.uid}`);
+
                 if (!response.ok) {
                     console.warn(`Could not fetch recommendations. Status: ${response.status}`);
                     setRecommendations([]);

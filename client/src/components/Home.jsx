@@ -79,7 +79,8 @@ const Home = () => {
         const fetchRecommendations = async () => {
             setIsLoadingRecs(true);
             try {
-                const response = await fetch(`http://localhost:5001/recommendations/${user.uid}`);
+                const mlServiceUrl = import.meta.env.VITE_ML_SERVICE_URL || 'http://localhost:5001';
+                const response = await fetch(`${mlServiceUrl}/recommendations/${user.uid}`);
                 if (!response.ok) {
                     setRecommendations([]);
                     return;

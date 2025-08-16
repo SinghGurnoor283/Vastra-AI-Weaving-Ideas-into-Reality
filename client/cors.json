@@ -1,6 +1,9 @@
 [
   {
-    "origin": ["http://localhost:3000"],
+    "origin": [
+      "http://localhost:3000",
+      "https://vastra-ai-weaving-ideas-into-realit.vercel.app/"
+    ],
     "responseHeader": ["Content-Type"],
     "method": ["GET", "HEAD", "DELETE", "POST", "PUT"],
     "maxAgeSeconds": 3600

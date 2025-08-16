@@ -57,9 +57,10 @@ const FindTailor = () => {
                 setIsLoading(true);
                 setError('');
                 try {
-                    const response = await fetch(`http://localhost:5000/api/nearby-places?lat=${userLocation.lat}&lng=${userLocation.lng}`);
+                    const response = await fetch(`https://vastra-ai-weaving-ideas-into-reality-kun1.onrender.com/api/nearby-places?lat=${userLocation.lat}&lng=${userLocation.lng}`);
+
                     if (!response.ok) {
-                        throw new Error('Failed to fetch data from the server.');
+                    throw new Error('Failed to fetch data from the server.');
                     }
                     const data = await response.json();
                     setPlaces(data);

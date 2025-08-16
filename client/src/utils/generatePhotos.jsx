@@ -2,11 +2,15 @@ import { saveDesignToAppWrite } from './saveDesignToAppWrite';
 
 const generatePhotos = async (prompt, user) => {
     try {
-        const response = await fetch('http://localhost:5000/generate-image', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt }),
-        });
+        const response = await fetch(
+            'https://vastra-ai-weaving-ideas-into-reality-kun1.onrender.com/generate-image',
+            {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt }),
+            }
+            );
+
 
         const data = await response.json();
 
