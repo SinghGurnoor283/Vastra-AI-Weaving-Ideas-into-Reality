@@ -50,6 +50,7 @@ const Home = () => {
                 }, 3000);
             } else {
                 searchedText.current.placeholder = "Please log in to generate images";
+                
             }
         }
         return () => {
@@ -247,7 +248,10 @@ const Home = () => {
                                 type="text" 
                                 className="placeholder-animate flex-grow bg-transparent text-white placeholder-gray-400 focus:outline-none px-6 text-base sm:text-lg" 
                                 onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
-                                disabled={!user}
+                                onFocus={() => {
+                                    if (!user) navigate("/login"); 
+                                }}
+
                             />
                             <button className="bg-white text-black font-semibold px-6 sm:px-8 py-2 sm:py-3 rounded-full hover:bg-gray-200 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed" onClick={handleSearch} disabled={loading || !user}>
                                 {t.searchButton}
