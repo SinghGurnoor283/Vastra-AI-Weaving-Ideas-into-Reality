@@ -19,18 +19,25 @@ const ai = new GoogleGenAI({
 app.post('/generate-image', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
+
   try {
+    // Construct a precise fashion-related prompt
+    const detailedPrompt = `A full-body photograph of a fashion model wearing ${prompt}. 
+This should look like a professional fashion photoshoot image, showcasing clothing style, outfit details, and overall aesthetic.`;
+
     const result = await ai.models.generateContent({
       model: "gemini-2.0-flash-preview-image-generation",
-      contents: prompt,
+      contents: detailedPrompt,
       config: { responseModalities: [Modality.TEXT, Modality.IMAGE] },
     });
+
     const imagePart = result.candidates[0]?.content?.parts?.find(p => p.inlineData);
     if (imagePart) {
       res.json({ image: imagePart.inlineData.data });
-      axios.post('https://gurnoors-vastra-ai-final.hf.space/recluster')
-  .catch(err => console.error("ML reclustering error:", err.message));
 
+      // Trigger reclustering asynchronously
+      axios.post('https://gurnoors-vastra-ai-final.hf.space/recluster')
+        .catch(err => console.error("ML reclustering error:", err.message));
     } else {
       res.status(500).json({ error: "Image not generated" });
     }
@@ -39,6 +46,7 @@ app.post('/generate-image', async (req, res) => {
     res.status(500).json({ error: 'Failed to generate image' });
   }
 });
+
 
 app.get('/api/trends', async (req, res) => {
   try {

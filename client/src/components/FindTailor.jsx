@@ -1,4 +1,4 @@
-import React, {useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import Header from './Header';
 import Footer from './Footer';
@@ -7,6 +7,7 @@ import { useSelector } from 'react-redux';
 import { translations } from '../utils/translations';
 import ThemeToggler from './ThemeToggler';
 
+// Custom Icon Definitions
 const createIcon = (color) => {
     return new L.Icon({
         iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
@@ -24,7 +25,7 @@ const icons = {
     fabric_store: createIcon('green'),
     fashion_designer: createIcon('purple'),
     embroidery_shop: createIcon('orange'),
-    user: createIcon('yellow') 
+    user: createIcon('yellow')
 };
 
 const FindTailor = () => {
@@ -33,23 +34,33 @@ const FindTailor = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState('');
     
-    const currentLanguage = useSelector((state) => state.language.currentLanguage);
     const themeMode = useSelector((state) => state.theme.mode);
+    const currentLanguage = useSelector((state) => state.language.currentLanguage);
     const t = translations[currentLanguage];
 
     useEffect(() => {
+        // CORRECTED: Added more robust error handling for geolocation
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ lat: latitude, lng: longitude });
             },
             (err) => {
-                setError(t.couldNotGetLocation);
+                // Check the specific error code to provide a better message
+                let errorMessage = t.couldNotGetLocation;
+                if (err.code === 1) { // PERMISSION_DENIED
+                    errorMessage = "Location permission was denied. Please check your browser and phone settings to enable it.";
+                } else if (err.code === 2) { // POSITION_UNAVAILABLE
+                    errorMessage = "Location information is unavailable. Please check your network connection.";
+                } else if (err.code === 3) { // TIMEOUT
+                    errorMessage = "The request to get user location timed out.";
+                }
+                setError(errorMessage);
                 setIsLoading(false);
-                console.error(err);
+                console.error("Geolocation Error:", err);
             }
         );
-    }, [t.couldNotGetLocation]); 
+    }, [t.couldNotGetLocation]);
 
     useEffect(() => {
         if (userLocation) {
@@ -58,9 +69,8 @@ const FindTailor = () => {
                 setError('');
                 try {
                     const response = await fetch(`https://vastra-ai-weaving-ideas-into-reality-kun1.onrender.com/api/nearby-places?lat=${userLocation.lat}&lng=${userLocation.lng}`);
-
                     if (!response.ok) {
-                    throw new Error('Failed to fetch data from the server.');
+                        throw new Error('Failed to fetch data from the server.');
                     }
                     const data = await response.json();
                     setPlaces(data);
@@ -83,8 +93,9 @@ const FindTailor = () => {
         ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
+
     return (
-        <div className={`min-h-screen -mt-4 transition-colors duration-300 ${themeMode === 'dark' ? 'bg-black text-gray-300' : 'bg-white text-gray-800'}`}>
+        <div className={`min-h-screen transition-colors duration-300 ${themeMode === 'dark' ? 'bg-black text-gray-300' : 'bg-white text-gray-800'}`}>
             <Header />
             <div className="container mx-auto pt-28 pb-12 px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
@@ -96,9 +107,9 @@ const FindTailor = () => {
                     </p>
                 </div>
                 
-                {error && <div className={`p-4 rounded-md mb-4 ${themeMode === 'dark' ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700'}`}>{error}</div>}
+                {error && <div className={`p-4 rounded-md mb-4 text-center ${themeMode === 'dark' ? 'bg-red-900/50 text-red-300' : 'bg-red-100 text-red-700'}`}>{error}</div>}
 
-                {isLoading && !userLocation && (
+                {isLoading && !userLocation && !error && (
                     <div className="text-center py-10"><p className="text-gray-400">{t.gettingLocation}</p></div>
                 )}
 
