@@ -15,7 +15,7 @@ const fetchUserDesigns = (userId, setUserDesigns) => {
         limit(5)
     );
 
-    const unsubscribe = onSnapshot(q, async (querySnapshot) => {
+    const unsubscribe = onSnapshot(q, async (querySnapshot) => { //nSnapshot is a real-time listener method provided by Firestore..A read-only view of the data at a specific moment, delivered to you by Firestore whenever the data that matches your query changes (and also once immediately with the current data). ..... QuerySnapshot (if you listen to a collection).
         try {
             await account.get();
         } catch (e) {
@@ -29,7 +29,7 @@ const fetchUserDesigns = (userId, setUserDesigns) => {
                     throw new Error("Invalid image URL in Firestore.");
                 }
 
-                const fileId = designData.image.split('/files/')[1].split('/view')[0];
+                const fileId = designData.image.split('/files/')[1].split('/view')[0]; // Split after /files/ → "<fileId>/view?….. "Then split before /view → "<fileId>". It is to get file id
                 const viewUrlObject = storage.getFileView('688b88a9002bedeadc4d', fileId);
                 return { id: doc.id, ...designData, image: viewUrlObject };
             } catch (error) {

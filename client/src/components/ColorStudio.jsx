@@ -42,7 +42,7 @@ const ColorStudio = ({ analysis, isLoading, onBaseColorSelect, selectedImageUrl 
                 <h3 className="font-semibold text-white text-lg">Suggested Palettes</h3>
                 <p className="text-sm text-gray-400 mb-4">Based on <span className="font-bold" style={{color: analysis.baseColor}}>{analysis.baseColor}</span></p>
                 <div className="space-y-5">
-                    {Object.entries(analysis.suggestedPalettes).map(([harmony, colors]) => (
+                    {Object.entries(analysis.suggestedPalettes).map(([harmony, colors]) => ( // Object into array of key value pairs
                       colors.length > 0 && (
                         <div key={harmony}>
                           <h4 className="text-sm font-semibold text-gray-300 capitalize mb-3">{harmony.replace('_', ' ')}</h4>
@@ -56,6 +56,18 @@ const ColorStudio = ({ analysis, isLoading, onBaseColorSelect, selectedImageUrl 
                     ))}
                 </div>
             </div>
+            {/* Eg - analysis.suggestedPalettes = {
+                    analogous: [
+                        { name: "red", hex: "#FF0000" },
+                        { name: "orange", hex: "#FFA500" }
+                    ],
+                    triadic: [
+                        { name: "blue", hex: "#0000FF" },
+                        { name: "yellow", hex: "#FFFF00" },
+                        { name: "red", hex: "#FF0000" }
+                    ]
+                    };
+                 */}
         </div>
     );
 };

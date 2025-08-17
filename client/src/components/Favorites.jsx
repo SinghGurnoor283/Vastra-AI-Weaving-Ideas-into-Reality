@@ -129,7 +129,7 @@ const Favorites = () => {
                                 <div 
                                     key={fav.id} 
                                     className={`group relative aspect-[3/4] rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-2 transition-all duration-300 ${themeMode === 'dark' ? 'bg-zinc-900' : 'bg-gray-100'}`}
-                                    // --- 7. UPDATE THE ONCLICK HANDLER ---
+                                    
                                     onClick={() => handleImageClick(fav.image)}
                                 >
                                     <img 

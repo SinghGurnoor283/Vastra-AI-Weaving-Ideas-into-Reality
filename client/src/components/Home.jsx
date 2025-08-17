@@ -15,14 +15,19 @@ import fetchUserDesigns from '../utils/fetchUserDesigns';
 import { translations } from '../utils/translations';
 import { db } from '../../firebaseConfig';
 import {collection,getDocs,doc,setDoc,deleteDoc} from 'firebase/firestore';
-
+// db: your initialized Firestore instance.
+// collection: builds a reference to a Firestore collection (e.g., users/{uid}/favorites).
+// getDocs: runs a one-time read query to fetch documents in a collection.
+// doc: builds a reference to a single document (e.g., users/{uid}/favorites/{designId}).
+// setDoc: creates/overwrites a document (used to add a favorite).
+// deleteDoc: deletes a document (used to remove a favorite).
 const Home = () => {
     const searchedText = useRef(null);
     const [userDesigns, setUserDesigns] = useState([]);
     const [recommendations, setRecommendations] = useState([]);
     const [isLoadingRecs, setIsLoadingRecs] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
-    const [favoritedIds, setFavoritedIds] = useState(new Set());
+    const [favoritedIds, setFavoritedIds] = useState(new Set());  // We can easily delete from set and add, can also serch using .has()
     
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -31,16 +36,17 @@ const Home = () => {
     const currentLanguage = useSelector((state) => state.language.currentLanguage);
     const themeMode = useSelector((state) => state.theme.mode); 
     const t = translations[currentLanguage];
-    
+    const [showCreationAlert, setShowCreationAlert] = useState(false);
+
      const { colorAnalysis, isAnalyzing, runAnalysis } = useColorAnalysis();
  
     useEffect(() => {
         let intervalId;
 
-        if (searchedText.current) {
+        if (searchedText.current) { //searchedText.current points to the input DOM element. just checks:Does the input element exist in the DOM
             if (user) {
                 let placeholderIndex = 0;
-                searchedText.current.placeholder = t.searchPlaceholder[placeholderIndex];
+                searchedText.current.placeholder = t.searchPlaceholder[placeholderIndex]; 
                 
                 intervalId = setInterval(() => {
                     placeholderIndex = (placeholderIndex + 1) % t.searchPlaceholder.length;
@@ -53,6 +59,9 @@ const Home = () => {
                 
             }
         }
+        // If user changes multiple times or we select diff language, multiple intervals would run concurrently → logs “tick” multiple times per second.
+        //Cleanup prevents this by stopping the previous interval before starting a new one.
+        //Avoid memory leaks and duplicate interval executions
         return () => {
             if (intervalId) {
                 clearInterval(intervalId);
@@ -73,7 +82,7 @@ const Home = () => {
         const fetchFavorites = async () => {
             const favoritesCol = collection(db, 'users', user.uid, 'favorites');
             const favoriteSnapshot = await getDocs(favoritesCol);
-            const favIds = new Set(favoriteSnapshot.docs.map(doc => doc.id));
+            const favIds = new Set(favoriteSnapshot.docs.map(doc => doc.id)); // storing each design id in a set for efficient lookup using doc.id
             setFavoritedIds(favIds);
         };
 
@@ -101,8 +110,18 @@ const Home = () => {
         return () => unsubscribe && unsubscribe();
     }, [user]);
 
+
+        useEffect(() => {
+            if (showCreationAlert) {
+                const timer = setTimeout(() => {
+                    setShowCreationAlert(false);
+                }, 4000); 
+                return () => clearTimeout(timer);
+            }
+        }, [showCreationAlert]);
+
     const handleToggleFavorite = async (e, design) => {
-        e.stopPropagation();
+        e.stopPropagation(); // prevent event bubbling - Prevents the card’s onClick from firing which would have opened the large preview image.
         if (!user?.uid) {
             console.log('Please log in to manage favorites.');
             navigate('/login');
@@ -110,7 +129,7 @@ const Home = () => {
         }
 
         const newFavoritedIds = new Set(favoritedIds);
-        const favoriteRef = doc(db, 'users', user.uid, 'favorites', design.id);
+        const favoriteRef = doc(db, 'users', user.uid, 'favorites', design.id); // reference to the document in the favorites collection
 
         try {
             if (favoritedIds.has(design.id)) {
@@ -139,6 +158,9 @@ const Home = () => {
         if (!prompt) return;
         dispatch(setLoading(true));
         const result = await generatePhotos(prompt, user);
+         if (result.success) {
+            setShowCreationAlert(true); 
+        } 
         if (!result.success) {
             console.log(result.message);
         }
@@ -163,8 +185,9 @@ const Home = () => {
     
     const RecommendationSkeleton = () => (
         <div className="overflow-x-auto hide-scrollbar">
+            {/*_ is just a placeholder variable name to indicate: “I’m ignoring this parameter.”*/}
             <div className="flex space-x-6 pb-2">
-                {[...Array(3)].map((_, index) => (
+                {[...Array(3)].map((_, index) => (  
                     <div key={index} className={`group relative w-[300px] flex-shrink-0 aspect-[3/4] rounded-xl shadow-lg animate-pulse ${themeMode === 'dark' ? 'bg-zinc-900' : 'bg-gray-200'}`}>
                         <div className={`w-full h-full ${themeMode === 'dark' ? 'bg-zinc-800' : 'bg-gray-300'}`}></div>
                     </div>
@@ -196,6 +219,32 @@ const Home = () => {
             
             <Header />
             
+             <div aria-live="polite" aria-atomic="true" className="fixed top-5 right-5 z-[60] w-full sm:w-auto">
+                <div className={`transition-all duration-500 ease-in-out ${showCreationAlert ? 'transform translate-x-0 opacity-100' : 'transform translate-x-full opacity-0'}`}>
+                    <div className="max-w-sm w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-white/10 overflow-hidden">
+                        <div className="p-4">
+                            <div className="flex items-start">
+                                <div className="flex-shrink-0">
+                                    <svg className="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div className="ml-3 w-0 flex-1 pt-0.5">
+                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{t.creationSaved}</p>
+                                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t.creationSavedSub}</p>
+                                </div>
+                                <div className="ml-4 flex-shrink-0 flex">
+                                    <button onClick={() => setShowCreationAlert(false)} className="bg-white dark:bg-zinc-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <span className="sr-only">Close</span>
+                                        &times;
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <main>
                 {loading && (
                     <div className="fixed inset-0 bg-black/90 z-50 flex items-center justify-center">
@@ -268,6 +317,7 @@ const Home = () => {
                     <section>
                         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 space-y-4 sm:space-y-0">
                             <h2 className={`text-3xl font-bold ${themeMode === 'dark' ? 'text-white' : 'text-black'}`}>{t.latestCreations}</h2>
+                             {user && userDesigns.length > 0 && (<p className={`mt-1 text-sm ${themeMode === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>{t.clickForColorStudio}</p>)}
                             {user && <Link to="/dashboard" className={`flex items-center font-semibold transition-colors self-start sm:self-center ${themeMode === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'}`}>{t.seeAll}<svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg></Link>}
                         </div>
                         {!user ? (
@@ -281,7 +331,8 @@ const Home = () => {
                                 return (
                                     <div key={design.id} className="group relative min-w-[250px] aspect-[4/5] bg-zinc-900 rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-2 transition-transform duration-300" onClick={() => handleImageClick(design.image)}>
                                         <img src={design.image} alt={design.prompt} className="w-full h-full object-cover transition-transform duration-300 ease-in-out group-hover:scale-110" />
-                                        <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"><p className="text-sm text-gray-200 line-clamp-3">{design.prompt}</p></div>
+                                        <div className="absolute inset-0 flex items-end bg-gradient-to-t from-black/80 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                        <p className="text-sm text-gray-200 line-clamp-3">{design.prompt}</p></div>
                                         <button onClick={(e) => handleToggleFavorite(e, design)} className={`absolute top-3 right-3 bg-black/50 p-2 rounded-full transition-colors ${isFavorited ? 'text-red-500' : 'text-white'} hover:bg-black/75`} aria-label="Toggle favorite">
                                             <svg className="h-6 w-6" fill={isFavorited ? 'currentColor' : 'none'} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                                 <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 016.364 0L12 7.5l1.318-1.182a4.5 4.5 0 116.364 6.364L12 20.25l-7.682-7.682a4.5 4.5 0 010-6.364z" />
@@ -297,6 +348,7 @@ const Home = () => {
                         <section className="lg:col-span-2">
                             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-8 space-y-4 sm:space-y-0">
                                 <h2 className={`text-3xl font-bold ${themeMode === 'dark' ? 'text-white' : 'text-black'}`}>{t.recommendedForYou}</h2>
+                                {user && recommendations.length > 0 && (<p className={`mt-1 text-sm ...`}>{t.clickForColorStudio}</p> )}
                                 {user && <Link to="/dashboard" className={`flex items-center font-semibold transition-colors self-start sm:self-center ${themeMode === 'dark' ? 'text-gray-400 hover:text-white' : 'text-gray-500 hover:text-black'}`}>{t.seeAll}<svg className="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg></Link>}
                             </div>
                             {!user ? (
@@ -307,7 +359,8 @@ const Home = () => {
                             ) : isLoadingRecs ? (
                                 <RecommendationSkeleton />
                             ) : (
-                                <div className="overflow-x-auto hide-scrollbar"><div className="flex space-x-6 pb-2">{recommendations.map((rec) => {
+                                <div className="overflow-x-auto hide-scrollbar">
+                                    <div className="flex space-x-6 pb-2">{recommendations.map((rec) => {
                                     const isFavorited = favoritedIds.has(rec.id);
                                     return (
                                         <div key={rec.id} className={`group relative w-[300px] flex-shrink-0 aspect-[3/4] rounded-xl shadow-lg overflow-hidden cursor-pointer transform hover:-translate-y-2 transition-transform duration-300 ${themeMode === 'dark' ? 'bg-zinc-900' : 'bg-gray-100'}`} onClick={() => handleImageClick(rec.image)}>

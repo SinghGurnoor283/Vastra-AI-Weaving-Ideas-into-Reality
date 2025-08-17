@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import Header from './Header';
 import Footer from './Footer';
-import L from 'leaflet';
+import L from 'leaflet'; //L is the core Leaflet namespace (used to create icon instances).
 import { useSelector } from 'react-redux';
 import { translations } from '../utils/translations';
 import ThemeToggler from './ThemeToggler';
 
-// Custom Icon Definitions
+
 const createIcon = (color) => {
     return new L.Icon({
         iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${color}.png`,
@@ -39,18 +39,16 @@ const FindTailor = () => {
     const t = translations[currentLanguage];
 
     useEffect(() => {
-        // CORRECTED: Added more robust error handling for geolocation
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 const { latitude, longitude } = position.coords;
                 setUserLocation({ lat: latitude, lng: longitude });
             },
             (err) => {
-                // Check the specific error code to provide a better message
                 let errorMessage = t.couldNotGetLocation;
-                if (err.code === 1) { // PERMISSION_DENIED
+                if (err.code === 1) { 
                     errorMessage = "Location permission was denied. Please check your browser and phone settings to enable it.";
-                } else if (err.code === 2) { // POSITION_UNAVAILABLE
+                } else if (err.code === 2) { 
                     errorMessage = "Location information is unavailable. Please check your network connection.";
                 } else if (err.code === 3) { // TIMEOUT
                     errorMessage = "The request to get user location timed out.";
@@ -89,7 +87,7 @@ const FindTailor = () => {
         ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
-    const mapAttribution = themeMode === 'dark'
+    const mapAttribution = themeMode === 'dark' //copyright attribution text
         ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
         : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 

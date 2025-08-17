@@ -3,7 +3,7 @@ const ColorSwatch = ({ color }) => {
     const [copied, setCopied] = useState(false);
 
     const handleCopy = (hex) => {
-        navigator.clipboard.writeText(hex);
+        navigator.clipboard.writeText(hex); //Web API for interacting with the system clipboard.
         setCopied(true);
         setTimeout(() => setCopied(false), 2000); 
     };

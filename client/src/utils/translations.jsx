@@ -44,7 +44,9 @@ export const translations = {
 
         ],
         languageTip: '💡 Tip: You can write your prompt in any language — Hindi, Punjabi, French, or more. \n The AI will understand and generate fashion ideas accordingly.',
-
+        creationSaved: 'Creation Saved!',
+        creationSavedSub: 'Your new design has been added to your creations.',
+        clickForColorStudio: 'Click any image to open the AI Color Studio.',
     },
     hi: {
         home: 'होम',
@@ -91,6 +93,9 @@ export const translations = {
 
         ],
         languageTip: '💡 सुझाव: आप हिंदी, पंजाबी, फ्रेंच या किसी भी भाषा में प्रॉम्प्ट लिख सकते हैं।\nएआई उसे समझकर फैशन आइडिया तैयार करेगा।',
+        creationSaved: 'रचना सहेजी गई!',
+        creationSavedSub: 'आपका नया डिज़ाइन आपकी रचनाओं में जोड़ दिया गया है।',
+        clickForColorStudio: 'एआई कलर स्टूडियो खोलने के लिए किसी भी छवि पर क्लिक करें।',
     },
     pa: {
         home: 'ਮੁੱਖ ਪੰਨਾ',
@@ -136,6 +141,9 @@ export const translations = {
             'ਫੁੱਲਾਂ ਦੇ ਪ੍ਰਿੰਟਾਂ ਵਾਲੀ ਇੱਕ ਵਗਦੀ ਹੋਈ ਬੋਹੀਮੀਅਨ ਮੈਕਸੀ ਡਰੈੱਸ...'
         ],
         languageTip: '💡 ਸੁਝਾਅ: ਤੁਸੀਂ ਆਪਣਾ ਪ੍ਰੋਂਪਟ ਹਿੰਦੀ, ਪੰਜਾਬੀ, ਫ੍ਰੈਂਚ ਜਾਂ ਕਿਸੇ ਵੀ ਭਾਸ਼ਾ ਵਿੱਚ ਲਿਖ ਸਕਦੇ ਹੋ।\nਏਆਈ ਤੁਹਾਡੀ ਭਾਸ਼ਾ ਨੂੰ ਸਮਝ ਕੇ ਫੈਸ਼ਨ ਆਈਡੀਅਜ਼ ਤਿਆਰ ਕਰੇਗਾ।',
+        creationSaved: 'ਰਚਨਾ ਸੁਰੱਖਿਅਤ ਕੀਤੀ ਗਈ!',
+        creationSavedSub: 'ਤੁਹਾਡਾ ਨਵਾਂ ਡਿਜ਼ਾਈਨ ਤੁਹਾਡੀਆਂ ਰਚਨਾਵਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਕੀਤਾ ਗਿਆ ਹੈ।',
+        clickForColorStudio: 'ਏਆਈ ਕਲਰ ਸਟੂਡੀਓ ਖੋਲ੍ਹਣ ਲਈ ਕਿਸੇ ਵੀ ਚਿੱਤਰ ਤੇ ਕਲਿੱਕ ਕਰੋ।',
     },
     fr: {
         home: 'Accueil',
@@ -181,5 +189,8 @@ export const translations = {
             'par ex., une robe longue bohème fluide avec des imprimés floraux...'
         ],
         languageTip: '💡 Astuce : Écrivez votre prompt en hindi, punjabi, français ou toute autre langue.\nL’IA comprendra et générera des idées de mode adaptées.',
+         creationSaved: 'Création Enregistrée !',
+        creationSavedSub: 'Votre nouveau design a été ajouté à vos créations.',
+        clickForColorStudio: 'Cliquez sur une image pour ouvrir l\'AI Color Studio.',
     },
 };
