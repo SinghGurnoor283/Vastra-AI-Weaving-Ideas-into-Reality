@@ -219,31 +219,35 @@ const Home = () => {
             
             <Header />
             
-            <div aria-live="polite" aria-atomic="true" className="fixed top-5 right-5 z-[60] w-full sm:w-auto pointer-events-none">
-            <div className={`transition-all duration-500 ease-in-out ${showCreationAlert ? 'transform translate-x-0 opacity-100' : 'transform translate-x-full opacity-0'}`}>
-                <div className="max-w-sm w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-white/10 overflow-hidden">
-                        <div className="p-4">
-                            <div className="flex items-start">
-                                <div className="flex-shrink-0">
-                                    <svg className="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
-                                </div>
-                                <div className="ml-3 w-0 flex-1 pt-0.5">
-                                    <p className="text-sm font-medium text-gray-900 dark:text-white">{t.creationSaved}</p>
-                                    <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t.creationSavedSub}</p>
-                                </div>
-                                <div className="ml-4 flex-shrink-0 flex">
-                                    <button onClick={() => setShowCreationAlert(false)} className="bg-white dark:bg-zinc-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                        <span className="sr-only">Close</span>
-                                        &times;
-                                    </button>
+                <div 
+                    aria-live="polite" 
+                    aria-atomic="true" 
+                    className="fixed top-5 left-1/2 -translate-x-1/2 z-[60] w-full max-w-lg pointer-events-none"
+                    >
+                    <div className={`transition-all duration-500 ease-in-out ${showCreationAlert ? 'transform translate-y-0 opacity-100' : 'transform -translate-y-full opacity-0'}`}>
+                        <div className="max-w-lg w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-white/10 overflow-hidden">
+                            <div className="p-4">
+                                <div className="flex items-start">
+                                    <div className="flex-shrink-0">
+                                        <svg className="h-6 w-6 text-green-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    </div>
+                                    <div className="ml-3 w-0 flex-1 pt-0.5">
+                                        <p className="text-sm font-medium text-gray-900 dark:text-white">{t.creationSaved}</p>
+                                        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{t.creationSavedSub}</p>
+                                    </div>
+                                    <div className="ml-4 flex-shrink-0 flex">
+                                        <button onClick={() => setShowCreationAlert(false)} className="bg-white dark:bg-zinc-800 rounded-md inline-flex text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                            <span className="sr-only">Close</span>
+                                            &times;
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+                    </div>
 
             <main>
                 {loading && (
