@@ -219,9 +219,9 @@ const Home = () => {
             
             <Header />
             
-             <div aria-live="polite" aria-atomic="true" className="fixed top-5 right-5 z-[60] w-full sm:w-auto">
-                <div className={`transition-all duration-500 ease-in-out ${showCreationAlert ? 'transform translate-x-0 opacity-100' : 'transform translate-x-full opacity-0'}`}>
-                    <div className="max-w-sm w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-white/10 overflow-hidden">
+            <div aria-live="polite" aria-atomic="true" className="fixed top-5 right-5 z-[60] w-full sm:w-auto pointer-events-none">
+            <div className={`transition-all duration-500 ease-in-out ${showCreationAlert ? 'transform translate-x-0 opacity-100' : 'transform translate-x-full opacity-0'}`}>
+                <div className="max-w-sm w-full bg-white dark:bg-zinc-800 shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 dark:ring-white/10 overflow-hidden">
                         <div className="p-4">
                             <div className="flex items-start">
                                 <div className="flex-shrink-0">
