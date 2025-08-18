@@ -35,7 +35,12 @@ const RecommendedForYou = () => {
         const fetchRecommendations = async () => {
             setIsLoading(true);
             try {
-                const response = await fetch(`https://gurnoors-vastra-ai-final.hf.space/recommendations/${user.uid}`);
+                const mlServiceBaseUrl = import.meta.env.VITE_ML_SERVICE_URL || 'http://localhost:5001';
+           
+
+                // Use the base URL in your fetch request
+                const response = await fetch(`${mlServiceBaseUrl}/recommendations/${user.uid}`);
+                
 
                 if (!response.ok) {
                     console.warn(`Could not fetch recommendations. Status: ${response.status}`);

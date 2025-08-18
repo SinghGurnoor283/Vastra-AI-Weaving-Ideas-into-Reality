@@ -17,15 +17,15 @@ export const useColorAnalysis = () => {
             if (baseColor) {
                 payload.baseColor = baseColor;
             }
-
+            const mlServiceUrl = import.meta.env.VITE_ML_SERVICE_URL || 'http://localhost:5001';
            const response = await fetch(
-                'https://gurnoors-vastra-ai-final.hf.space/analyze-colors',
+                `${mlServiceUrl}/analyze-colors`,
                 {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload),
                 }
-                );
+            );
 
 
             if (!response.ok) {
